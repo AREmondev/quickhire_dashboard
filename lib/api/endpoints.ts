@@ -1,0 +1,46 @@
+export const API_ENDPOINTS = {
+  AUTH: {
+    REGISTER: "/api/v1/auth/register",
+    LOGIN: "/api/v1/auth/login",
+    REFRESH: "/api/v1/auth/refresh",
+    LOGOUT: "/api/v1/auth/logout",
+    ME: "/api/v1/me",
+  },
+  JOBS: {
+    PUBLIC: "/api/v1/jobs",
+    DETAIL: (slug: string) => `/api/v1/jobs/${slug}`,
+    ADMIN_LIST: "/api/v1/jobs/admin/list",
+    ADMIN_BASE: "/api/v1/jobs/admin",
+    ADMIN_DETAIL: (id: string) => `/api/v1/jobs/admin/${id}`,
+    JOB_DETAILS: (slug: string) => `/api/v1/jobs/${slug}`,
+    PUBLISH: (id: string) => `/api/v1/jobs/admin/${id}/publish`,
+    UNPUBLISH: (id: string) => `/api/v1/jobs/admin/${id}/unpublish`,
+    ASSESSMENTS: (id: string) => `/api/v1/jobs/admin/${id}/assessments`,
+    APPLICATIONS: (jobId: string) => `/api/v1/jobs/${jobId}/applications`,
+  },
+  APPLICATIONS: {
+    BASE: "/api/v1/applications",
+    DETAIL: (id: string) => `/api/v1/applications/${id}`,
+    SUBMIT: (id: string) => `/api/v1/applications/${id}/submit`,
+    ANSWERS: (id: string) => `/api/v1/applications/${id}/answers`,
+    STATUS: (id: string) => `/api/v1/applications/${id}/status`,
+  },
+  ADMIN: {
+    COMPANIES: "/api/v1/admin/companies",
+    COMPANY_DETAIL: (id: string) => `/api/v1/admin/companies/${id}`,
+    CATEGORIES: "/api/v1/admin/categories",
+    CATEGORY_DETAIL: (id: string) => `/api/v1/admin/categories/${id}`,
+    EXPERIENCELEVELS: "/api/v1/experience-levels",
+    EXPERIENCELEVEL_DETAIL: (id: string) => `/api/v1/experience-levels/${id}`,
+    JOBTYPES: "/api/v1/job-types",
+    JOBTYPE_DETAIL: (id: string) => `/api/v1/job-types/${id}`,
+  },
+  ASSESSMENTS: {
+    BASE: "/api/v1/assessments",
+    DETAIL: (id: string) => `/api/v1/assessments/${id}`,
+    UPDATE: (id: string) => `/api/v1/assessments/${id}`,
+  },
+  UPLOADS: {
+    IMAGES: "/api/v1/uploads/images",
+  },
+} as const;

@@ -1,0 +1,169 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  /* accent colors for direct CSS use */
+  --color-primary: #4640DE;
+  --color-accent-green: #56CDAD;
+  --color-accent-yellow: #FFB836;
+  --color-accent-red: #FF6550;
+  --color-accent-blue: #26A4FF;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px black;
+}
+
+@media (min-width: 740px) {
+  .outline-text {
+    -webkit-text-stroke: 2px black;
+  }
+}
+
+/* Focus visible ring for accessibility */
+*:focus-visible {
+  outline: 2px solid #4640DE;
+  outline-offset: 2px;
+}
+
+/* ======= Animations ======= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.4s ease-out forwards;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.4s ease-out forwards;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* ======= Scrollbar hide ======= */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ======= Custom scrollbar ======= */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F8FD;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D6DDEB;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7C8493;
+}
+
+/* ======= Print styles are handled inline via Tailwind print: variants ======= */
+@media print {
+  body {
+    background: white;
+  }
+}
+
+/* ======= Tailwind accent color for checkbox/radio ======= */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: #4640DE;
+}
+
+/* ======= Textarea resize none ======= */
+textarea {
+  resize: vertical;
+}
+
+/* Code syntax highlight green */
+.code-area {
+  color: #56CDAD;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+}
