@@ -29,18 +29,7 @@ import {
   useUnpublishJobMutation,
 } from "@/lib/hooks/jobs";
 import { useJobTypesQuery } from "@/lib/hooks/job-types";
-
-interface JobListItem {
-  id: string;
-  slug: string;
-  title: string;
-  job_type: string;
-  experience_level: string;
-  location: string;
-  isPublished: boolean;
-  isRemote: boolean;
-  updatedAt: string;
-}
+import { Job } from "@/lib/api/types";
 
 export default function AdminJobsPage() {
   const { data: session } = useSession();
@@ -67,7 +56,7 @@ export default function AdminJobsPage() {
   const unpublishMutation = useUnpublishJobMutation(publishLoading || "");
 
   const filtered = useMemo(() => {
-    let result = jobs as JobListItem[];
+    let result = jobs;
     if (search) {
       result = result.filter(
         (j) =>
@@ -95,7 +84,7 @@ export default function AdminJobsPage() {
   };
 
   const handleTogglePublish = async (
-    job: JobListItem,
+    job: Job,
     action: "publish" | "unpublish",
   ) => {
     if (!session) return;
@@ -222,7 +211,7 @@ export default function AdminJobsPage() {
                       </td>
                       <td className="px-4 py-3 hidden md:table-cell">
                         <JobTypeBadge
-                          type={jobTypeMap[job.job_type] || job.job_type}
+                          type={jobTypeMap[job.jobType._id] || job.jobType.name}
                         />
                       </td>
                       <td className="px-4 py-3 text-neutral-60 hidden lg:table-cell">

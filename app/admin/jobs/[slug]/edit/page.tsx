@@ -140,8 +140,8 @@ export default function EditJobPage() {
   const defaultValues: Partial<JobCreateInput> = {
     title: job.title,
     companyId: job.companyId,
-    jobType: job.job_type || "",
-    experienceLevel: job.experience_level || "",
+    jobType: job.jobType || "",
+    experienceLevel: job.experienceLevel || "",
     location: job.location,
     isRemote: job.isRemote,
     salaryMin: job.salaryMin,

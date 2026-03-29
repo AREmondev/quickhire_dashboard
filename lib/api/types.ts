@@ -72,8 +72,16 @@ export interface Job {
   slug: string;
   companyId: string;
   title: string;
-  job_type: string;
-  experience_level: string;
+  jobType: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
+  experienceLevel: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
   location: string;
   isRemote: boolean;
   salaryMin: number;
