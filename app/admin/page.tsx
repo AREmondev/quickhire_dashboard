@@ -26,43 +26,86 @@ import { useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { getAdminJobs } from "@/lib/services/jobs";
 import { useQuery } from "@tanstack/react-query";
-
-// Mock stat chart data (replace with real API when analytics endpoint is added)
-const WEEKLY_DATA = [
-  { day: "Mon", views: 120, applied: 34 },
-  { day: "Tue", views: 180, applied: 52 },
-  { day: "Wed", views: 220, applied: 80 },
-  { day: "Thu", views: 160, applied: 44 },
-  { day: "Fri", views: 90, applied: 25 },
-  { day: "Sat", views: 60, applied: 15 },
-  { day: "Sun", views: 50, applied: 10 },
-];
+import { useCandidateApplicationsQuery } from "@/lib/hooks/applications";
 
 export default function AdminDashboardPage() {
   const { data: session } = useSession();
-  const { data: jobs, isLoading } = useQuery({
+  const { data: jobs, isLoading: isJobsLoading } = useQuery({
     queryKey: ["admin-jobs"],
     queryFn: getAdminJobs,
     enabled: !!session,
   });
 
+  const { data: applications, isLoading: isAppsLoading } =
+    useCandidateApplicationsQuery();
+
+  const isLoading = isJobsLoading || isAppsLoading;
+
   const stats = useMemo(() => {
+    const appItems = Array.isArray(applications)
+      ? applications
+      : (applications as any)?.items || [];
+
     if (!jobs) {
       return {
         totalJobs: 0,
         publishedJobs: 0,
-        totalApplications: 0,
+        totalApplications: appItems.length,
         recentJobs: [],
       };
     }
     return {
       totalJobs: jobs.length,
       publishedJobs: jobs.filter((j) => j.isPublished).length,
-      totalApplications: 0,
+      totalApplications: appItems.length,
       recentJobs: jobs.slice(0, 5),
     };
-  }, [jobs]);
+  }, [jobs, applications]);
 
+  const weeklyData = useMemo(() => {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const last7Days: {
+      day: string;
+      date: string;
+      jobs: number;
+      applications: number;
+    }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      last7Days.push({
+        day: days[d.getDay()],
+        date: d.toISOString().split("T")[0],
+        jobs: 0,
+        applications: 0,
+      });
+    }
+
+    if (jobs) {
+      jobs.forEach((job) => {
+        console.log(job.updatedAt);
+        if (!job.updatedAt) return;
+        const date = new Date(job.updatedAt).toISOString().split("T")[0];
+        const dayEntry = last7Days.find((d) => d.date === date);
+        if (dayEntry) dayEntry.jobs++;
+      });
+    }
+
+    if (applications) {
+      const appItems = Array.isArray(applications)
+        ? applications
+        : (applications as any).items || [];
+      appItems.forEach((app: any) => {
+        if (!app.createdAt) return;
+        const date = new Date(app.createdAt).toISOString().split("T")[0];
+        const dayEntry = last7Days.find((d) => d.date === date);
+        if (dayEntry) dayEntry.applications++;
+      });
+    }
+
+    return last7Days;
+  }, [jobs, applications]);
+  console.log(weeklyData);
   const jobTypesQuery = useJobTypesQuery();
   const jobTypeMap = useMemo(() => {
     return Object.fromEntries(
@@ -137,7 +180,7 @@ export default function AdminDashboardPage() {
           />
           <StatCard
             title="Applications"
-            value={"Coming soon"}
+            value={isLoading ? "–" : stats.totalApplications}
             icon={<RiUserLine className="text-accent-blue text-xl" />}
             iconBg="bg-accent-blue/10"
           />
@@ -153,13 +196,13 @@ export default function AdminDashboardPage() {
                   Job Statistics
                 </h3>
                 <p className="text-xs text-neutral-60">
-                  Weekly views vs applications
+                  Weekly jobs vs applications
                 </p>
               </div>
               <div className="flex items-center gap-3 text-xs font-medium text-neutral-60">
                 <span className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-sm bg-accent-yellow inline-block" />{" "}
-                  Views
+                  Jobs
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-sm bg-primary inline-block" />{" "}
@@ -168,7 +211,7 @@ export default function AdminDashboardPage() {
               </div>
             </div>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={WEEKLY_DATA} barSize={14} barGap={4}>
+              <BarChart data={weeklyData} barSize={14} barGap={4}>
                 <CartesianGrid
                   strokeDasharray="3 3"
                   stroke="#D6DDEB"
@@ -194,8 +237,12 @@ export default function AdminDashboardPage() {
                   }}
                 />
                 <Legend wrapperStyle={{ display: "none" }} />
-                <Bar dataKey="views" fill="#FFB836" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="applied" fill="#4640DE" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="jobs" fill="#FFB836" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="applications"
+                  fill="#4640DE"
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -247,7 +294,9 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="flex flex-col items-end gap-1 shrink-0">
                       <JobTypeBadge
-                        type={jobTypeMap[job.job_type] || job.job_type}
+                        type={
+                          jobTypeMap[job?.jobType?.name] || job?.jobType?.name
+                        }
                       />
                       <StatusBadge
                         status={job.isPublished ? "published" : "unpublished"}
