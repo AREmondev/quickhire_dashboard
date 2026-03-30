@@ -73,12 +73,12 @@ export interface Job {
   companyId: string;
   title: string;
   jobType: {
-    _id: string;
+    id: string;
     name: string;
     slug: string;
   };
   experienceLevel: {
-    _id: string;
+    id: string;
     name: string;
     slug: string;
   };

@@ -136,12 +136,12 @@ export default function EditJobPage() {
     );
   }
   if (!job) return null;
-
+  console.log("job", job);
   const defaultValues: Partial<JobCreateInput> = {
     title: job.title,
     companyId: job.companyId,
-    jobType: job.jobType || "",
-    experienceLevel: job.experienceLevel || "",
+    jobType: job.jobType.id || "",
+    experienceLevel: job.experienceLevel.id || "",
     location: job.location,
     isRemote: job.isRemote,
     salaryMin: job.salaryMin,
