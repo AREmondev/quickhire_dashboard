@@ -165,10 +165,10 @@ export default function JobDetailPage() {
               </h1>
               <div className="flex flex-wrap items-center gap-2 mt-2">
                 <JobTypeBadge
-                  type={jobTypeMap[job.jobType._id] || job.jobType.name}
+                  type={jobTypeMap[job.jobType.id] || job.jobType.name}
                 />
                 <span className="text-xs bg-neutral-20 text-neutral-60 font-semibold px-2.5 py-1 rounded-full">
-                  {experienceLevelMap[job.experienceLevel._id] ||
+                  {experienceLevelMap[job.experienceLevel.id] ||
                     job.experienceLevel.name}
                 </span>
                 {job.isRemote && (

@@ -211,7 +211,7 @@ export default function AdminJobsPage() {
                       </td>
                       <td className="px-4 py-3 hidden md:table-cell">
                         <JobTypeBadge
-                          type={jobTypeMap[job.jobType._id] || job.jobType.name}
+                          type={jobTypeMap[job.jobType.id] || job.jobType.name}
                         />
                       </td>
                       <td className="px-4 py-3 text-neutral-60 hidden lg:table-cell">
