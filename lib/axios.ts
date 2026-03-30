@@ -2,7 +2,9 @@ import axios from "axios";
 import { getSession, signOut } from "next-auth/react";
 import { API_ENDPOINTS } from "./api/endpoints";
 
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+const baseURL =
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  "https://job-backend-0q3q.onrender.com";
 
 // Public instance for requests that don't need auth or handle it differently
 export const publicApiClient = axios.create({
