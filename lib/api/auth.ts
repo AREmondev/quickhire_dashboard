@@ -1,5 +1,5 @@
 import type { AuthUser, User } from "./types";
-import apiClient, { publicClient } from "@/lib/axios";
+import apiClient, { publicApiClient } from "@/lib/axios";
 import { API_ENDPOINTS } from "./endpoints";
 
 export async function login(
@@ -7,7 +7,7 @@ export async function login(
   password: string,
 ): Promise<AuthUser> {
   try {
-    const response = await publicClient.post(API_ENDPOINTS.AUTH.LOGIN, {
+    const response = await publicApiClient.post(API_ENDPOINTS.AUTH.LOGIN, {
       email,
       password,
     });
@@ -25,7 +25,7 @@ export async function register(
   role: "candidate" | "employer" | "admin" = "employer",
   companyId?: string,
 ): Promise<AuthUser> {
-  const res = await apiClient.post<{ success: true; data: AuthUser }>(
+  const res = await publicApiClient.post<{ success: true; data: AuthUser }>(
     API_ENDPOINTS.AUTH.REGISTER,
     {
       email,
@@ -41,7 +41,7 @@ export async function register(
 export async function refreshTokens(
   refreshToken: string,
 ): Promise<{ accessToken: string; refreshToken: string }> {
-  const res = await apiClient.post<{
+  const res = await publicApiClient.post<{
     success: true;
     data: { accessToken: string; refreshToken: string };
   }>(API_ENDPOINTS.AUTH.REFRESH, { refreshToken });
