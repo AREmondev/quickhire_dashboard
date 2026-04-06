@@ -24,6 +24,11 @@ export const authConfig: AuthOptions = {
           password: string;
         };
         const { user, tokens } = await login(String(email), String(password));
+
+        if (user.role !== "admin" && user.role !== "employer") {
+          throw new Error("You are not authorized to access this dashboard.");
+        }
+
         return {
           id: user.id,
           email: user.email,

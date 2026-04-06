@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
       });
 
       if (result?.error) {
-        setServerError("Login failed. Check your credentials.");
+        setServerError("Invalid credentials or unauthorized role.");
       } else {
         router.push("/admin");
       }

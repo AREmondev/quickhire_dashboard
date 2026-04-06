@@ -16,7 +16,6 @@ import Link from "next/link";
 const ROLE_OPTIONS = [
   { value: "employer", label: "Employer" },
   { value: "admin", label: "Admin" },
-  { value: "candidate", label: "Candidate" },
 ];
 
 export default function AdminRegisterPage() {
